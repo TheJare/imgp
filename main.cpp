@@ -86,5 +86,7 @@ int main(int argc, char* argv[])
     if (options.infiles.empty()) {
         error("No input files specified");
     }
+
+    ImagePack(options);
 	return 0;
 }

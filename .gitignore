@@ -1,7 +1,10 @@
 Debug/
 Release/
+temp/
 
+*.obj
 *.sdf
 *.opensdf
 *.suo
 *.vcxproj.filters
+*.exe

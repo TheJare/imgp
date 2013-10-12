@@ -3,9 +3,10 @@
 #define INCLUDE_IMAGEPACKER_H
 
 #include <vector>
+#include <memory>
 
 struct Image {
-    unsigned char *data;
+    std::shared_ptr<unsigned char> data;
     int w;
     int h;
     int ncomps;
@@ -19,6 +20,9 @@ struct Image {
     ~Image();
 
     void Read(const char *filename);
+
+    void Blit(const Image &src, int x, int y, int srcx, int srcy, int srcw, int srch);
+    void Blit(const Image &src, int x, int y) { Blit(src, x, y, 0, 0, src.w, src.h); }
 };
 
 struct Options {
@@ -39,5 +43,8 @@ struct Options {
 
     void AddInfile(const char *filename);
 };
+
+void ImagePack(const Options &options);
+
 
 #endif //INCLUDE_IMAGEPACKER_H
