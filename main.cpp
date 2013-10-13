@@ -31,7 +31,7 @@
 
 void help(FILE *out) {
     fputs(
-        "Usage: ImagePacker in_files [-options]\n"
+        "Usage: imgp in_files [-options]\n"
         "  Options:\n"
         "    -o, --output-filename filename    Output filename (mandatory)\n"
         "    -minw, --min-width    number      Minimum output width [64]\n"

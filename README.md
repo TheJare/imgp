@@ -10,7 +10,7 @@ Uses a modified version of the Guillotine bin packing algorithm by Jukka Jylänk
 
 ## Usage
 
-    Usage: ImagePacker in_files [-options]
+    Usage: imgp in_files [-options]
       Options:
         -o, --output-filename filename    Output filename (mandatory)
         -minw, --min-width    number      Minimum output width [64]
