@@ -39,10 +39,6 @@ void GuillotineBinPack::Init(int width, int height)
     occupiedWidth = 0;
     occupiedHeight = 0;
 
-#ifdef _DEBUG
-    disjointRects.Clear();
-#endif
-
     // Clear any memory of previously packed rectangles.
     usedRectangles.clear();
 
@@ -155,9 +151,6 @@ bool GuillotineBinPack::Insert(std::vector<RectSize> rects, bool merge, bool fli
 
         // Remember the new used rectangle.
         usedRectangles.push_back(newNode);
-
-        // Check that we're really producing correct packings here.
-        debug_assert(disjointRects.Add(newNode) == true);
     }
     return true;
 }
@@ -320,19 +313,10 @@ void GuillotineBinPack::SplitFreeRectAlongAxis(const Rect &freeRect, const Rect 
         freeRectangles.push_back(bottom);
     if (right.width > 0 && right.height > 0)
         freeRectangles.push_back(right);
-
-    debug_assert(disjointRects.Disjoint(bottom));
-    debug_assert(disjointRects.Disjoint(right));
 }
 
 void GuillotineBinPack::MergeFreeList()
 {
-#ifdef _DEBUG
-    DisjointRectCollection test;
-    for(size_t i = 0; i < freeRectangles.size(); ++i)
-        assert(test.Add(freeRectangles[i]) == true);
-#endif
-
     // Do a Theta(n^2) loop to see if any pair of free rectangles could me merged into one.
     // Note that we miss any opportunities to merge three rectangles into one. (should call this function again to detect that)
     for(size_t i = 0; i < freeRectangles.size(); ++i)
@@ -371,12 +355,6 @@ void GuillotineBinPack::MergeFreeList()
                 }
             }
         }
-
-#ifdef _DEBUG
-    test.Clear();
-    for(size_t i = 0; i < freeRectangles.size(); ++i)
-        assert(test.Add(freeRectangles[i]) == true);
-#endif
 }
 
 }

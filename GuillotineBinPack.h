@@ -98,11 +98,6 @@ private:
     /// Stores a list of rectangles that represents the free area of the bin. This rectangles in this list are disjoint.
     std::vector<Rect> freeRectangles;
 
-#ifdef _DEBUG
-    /// Used to track that the packer produces proper packings.
-    DisjointRectCollection disjointRects;
-#endif
-
     static int ScoreByHeuristic(int width, int height, const Rect &freeRect, FreeRectChoiceHeuristic rectChoice);
     // The following functions compute (penalty) score values if a rect of the given size was placed into the 
     // given free rectangle. In these score values, smaller is better.
