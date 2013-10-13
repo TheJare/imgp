@@ -1,0 +1,1 @@
+g++ -stdlib=libc++ -std=c++11 -Wall -O3 Image.cpp ImagePacker.cpp Rect.cpp GuillotineBinPack.cpp main.cpp -o imgp
