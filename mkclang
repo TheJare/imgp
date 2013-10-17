@@ -1,1 +1,2 @@
-g++ -stdlib=libc++ -std=c++11 -Wall -O3 Image.cpp ImagePacker.cpp Rect.cpp GuillotineBinPack.cpp main.cpp -o imgp
+[ ! -e bin ] && mkdir bin
+g++ -stdlib=libc++ -std=c++11 -Wall -O3 src/Image.cpp src/ImagePacker.cpp src/Rect.cpp src/GuillotineBinPack.cpp src/main.cpp -o bin/imgp

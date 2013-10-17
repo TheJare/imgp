@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2013, Javier Arevalo
+ * https://github.com/TheJare/imgp.git
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +42,7 @@ void help(FILE *out) {
         "    -padx, --padding-x    number      Horizontal space between images [1]\n"
         "    -pady, --padding-y    number      Vertical space between images [1]\n"
         "    -fmt, --map-format    [json,plist,txt] Format of the map file [plist]\n"
-        "    -flip, --allow-flip               Images can be flipped\n"
+        "    -rot, --allow-rotate              Images can be rotated 90 deg\n"
         "    -sq, --force-square               Output must be square\n"
 	, out);
 }
@@ -120,7 +121,7 @@ int main(int argc, char* argv[])
                 else {
                     error("Unrecognized format: %s", fmt.c_str());
                 }
-            } else if (arg.compare("-flip") == 0 || arg.compare("--allow-flip") == 0) {
+            } else if (arg.compare("-rot") == 0 || arg.compare("--allow-rotate") == 0) {
                 options.allowFlipping = true;
             } else if (arg.compare("-sq") == 0 || arg.compare("--force-square") == 0) {
                 options.forceSquare = true;

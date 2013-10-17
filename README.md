@@ -20,7 +20,7 @@ Uses a modified version of the Guillotine bin packing algorithm by Jukka Jylänk
         -padx, --padding-x    number      Horizontal space between images [1]
         -pady, --padding-y    number      Vertical space between images [1]
         -fmt, --map-format    [json,plist,txt] Format of the map file [plist]
-        -flip, --allow-flip               Images can be flipped
+        -rot, --allow-rotate              Images can be rotated 90 deg
         -sq, --force-square               Output must be square
 
 The output filename determines where the resulting image (always .png) and map file will be saved.
@@ -30,17 +30,22 @@ Examples:
     imgp Bitmaps/* -o Atlas/atlas.png -fmt json -flip
     imgp Bitmaps/* -o=Atlas/atlas -fmt=txt -sq -flip -minw=256 -minh=256
 
-Note: Not heavily tested yet!
+Resulting PNG files are not optimally compressed. I recommend using something like
+[optipng](http://optipng.sourceforge.net/) or [pngcrush](http://pmt.sourceforge.net/pngcrush/)
+
+Note: Not heavily tested yet, output formats may be still bogus.
 
 ## Building
 
-Get the latest source code from []()
+Get the latest source code from [https://github.com/TheJare/imgp.git](https://github.com/TheJare/imgp.git)
 
-Windows:
+### Windows
 
-    vc.bat
+    mkvc.bat
 
-OSX / Linux (using clang):
+Or use the provided project & solution
+
+### OSX / Linux (using clang)
 
     ./mkclang
 
