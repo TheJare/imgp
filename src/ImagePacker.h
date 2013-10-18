@@ -28,9 +28,12 @@
 #include <string>
 
 struct Options {
+    static const char *version;
+
     enum Format {
         FORMAT_TXT,
-        FORMAT_JSON,
+        FORMAT_JSON_HASH,
+        FORMAT_JSON_ARRAY,
         FORMAT_PLIST,
     };
 

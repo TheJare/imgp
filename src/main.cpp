@@ -41,9 +41,11 @@ void help(FILE *out) {
         "    -maxh, --max-height   number      Maximum output height [4096]\n"
         "    -padx, --padding-x    number      Horizontal space between images [1]\n"
         "    -pady, --padding-y    number      Vertical space between images [1]\n"
-        "    -fmt, --map-format    [json,plist,txt] Format of the map file [plist]\n"
+        "    -fmt, --map-format    format      Format of the map file [plist]\n"
         "    -rot, --allow-rotate              Images can be rotated 90 deg\n"
         "    -sq, --force-square               Output must be square\n"
+        "  Valid formats: plist, json-array, json-hash, txt"
+        "\n"
 	, out);
 }
 
@@ -115,7 +117,8 @@ int main(int argc, char* argv[])
                 options.pady = atoi(FindParam(argc, argv, arg, i, paramStr));
             } else if (arg.compare("-fmt") == 0 || arg.compare("--format") == 0) {
                 std::string fmt = FindParam(argc, argv, arg, i, paramStr);
-                if (fmt.compare("json") == 0) options.format = Options::FORMAT_JSON;
+                if (fmt.compare("json-array") == 0) options.format = Options::FORMAT_JSON_ARRAY;
+                else if (fmt.compare("json-hash") == 0) options.format = Options::FORMAT_JSON_HASH;
                 else if (fmt.compare("plist") == 0) options.format = Options::FORMAT_PLIST;
                 else if (fmt.compare("txt") == 0) options.format = Options::FORMAT_TXT;
                 else {
@@ -127,6 +130,9 @@ int main(int argc, char* argv[])
                 options.forceSquare = true;
             } else if (arg.compare("-h") == 0 || arg.compare("--help") == 0) {
                 help(stdout);
+                exit(0);
+            } else if (arg.compare("-v") == 0 || arg.compare("--version") == 0) {
+                printf("imgp v%s", Options::version);
                 exit(0);
             } else {
                 error("Invalid argument: %s" , arg.c_str());

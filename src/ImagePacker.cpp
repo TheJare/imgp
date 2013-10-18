@@ -31,6 +31,8 @@
 #include "Image.h"
 #include "GuillotineBinPack.h"
 
+const char *Options::version = "1.0.0";
+
 // Round value up to the next power of 2
 // From the always fun http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 int NextPower2(int v) {
@@ -70,6 +72,14 @@ std::string basename(const std::string &s) {
         return s;
     }
     return s.substr(0, posdot);
+}
+
+std::string filename(const std::string &s) {
+    size_t possep = s.find_last_of(PATH_SEPARATOR);
+    if (possep == std::string::npos) {
+        return s;
+    }
+    return s.substr(possep+1, std::string::npos);
 }
 
 // ------------------
@@ -147,17 +157,23 @@ void ImagePack(const Options &options)
     std::string mapExtension;
     switch (options.format) {
         case Options::FORMAT_TXT: mapExtension = ".txt"; break;
-        case Options::FORMAT_JSON: mapExtension = ".json"; break;
+        case Options::FORMAT_JSON_HASH: mapExtension = ".json"; break;
+        case Options::FORMAT_JSON_ARRAY: mapExtension = ".json"; break;
         case Options::FORMAT_PLIST: mapExtension = ".plist"; break;
     }
-    std::string outmapfile = basename(options.outfile) + mapExtension;
-    FILE *mapf = fopen(outmapfile.c_str(), "wt");
+    std::string outMapFilename = basename(options.outfile) + mapExtension;
+    std::string outImageFilename = basename(options.outfile) + ".png";
+
+    FILE *mapf = fopen(outMapFilename.c_str(), "wt");
     switch (options.format) {
         case Options::FORMAT_TXT:
-            fprintf(mapf, "atlas: \"%s\" %d,%d total %d\n", options.outfile.c_str(), w, h, (int)binPacker.GetUsedRectangles().size());
+            fprintf(mapf, "atlas: \"%s\" %d,%d total %d\n", filename(outImageFilename).c_str(), w, h, (int)binPacker.GetUsedRectangles().size());
             break;
-        case Options::FORMAT_JSON:
-            fputs("{ \"frames\": {\n", mapf);
+        case Options::FORMAT_JSON_HASH:
+            fprintf(mapf, "{\"meta\": {\"app\":\"imgp\",\"version\":\"%s\",\"image\":\"%s\",\"size\":{\"w\":%d,\"h\":%d}},\n \"frames\": {\n", Options::version, filename(outImageFilename).c_str(), w, h);
+            break;
+        case Options::FORMAT_JSON_ARRAY:
+            fprintf(mapf, "{\"meta\": {\"app\":\"imgp\",\"version\":\"%s\",\"image\":\"%s\",\"size\":{\"w\":%d,\"h\":%d}},\n \"frames\": [\n", Options::version, filename(outImageFilename).c_str(), w, h);
             break;
         case Options::FORMAT_PLIST:
             fputs("<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
@@ -169,7 +185,8 @@ void ImagePack(const Options &options)
         if (r.flipped) {
             r.image->Rotate();
         }
-        std::string saneFilename = ReplaceString(r.image->filename, "\\", "/");
+        // std::string saneFilename = ReplaceString(r.image->filename, "\\", "/");
+        std::string saneFilename = filename(r.image->filename);
         switch (options.format) {
             case Options::FORMAT_TXT:
                 fprintf(mapf, "%s: %d,%d x %d,%d offset %d,%d orgsize %d,%d %s\n",
@@ -178,9 +195,21 @@ void ImagePack(const Options &options)
                     r.image->fillx, r.image->filly, r.image->w, r.image->h,
                     r.flipped? "rotated" : "original");
                 break;
-            case Options::FORMAT_JSON:
+            case Options::FORMAT_JSON_HASH:
                 fprintf(mapf,
                     "%s\"%s\": { \"frame\": {\"x\":%d,\"y\":%d,\"w\":%d,\"h\":%d},\"rotated\":%s,\"trimmed\":%s,\"spriteSourceSize\":{\"x\":%d,\"y\":%d,\"w\":%d,\"h\":%d},\"sourceSize\":{\"w\":%d,\"h\":%d}}\n",
+                    firstImage? " " : ",",
+                    saneFilename.c_str(),
+                    r.x, r.y, r.image->fillw, r.image->fillh,
+                    r.flipped? "true" : "false",
+                    (r.image->w!=r.image->fillw || r.image->h!=r.image->fillh)? "true" : "false",
+                    r.image->fillx, r.image->filly, r.image->fillw, r.image->fillh,
+                    r.image->w, r.image->h);
+                firstImage = false;
+                break;
+            case Options::FORMAT_JSON_ARRAY:
+                fprintf(mapf,
+                    "%s{ \"filename\":\"%s\",\"frame\":{\"x\":%d,\"y\":%d,\"w\":%d,\"h\":%d},\"rotated\":%s,\"trimmed\":%s,\"spriteSourceSize\":{\"x\":%d,\"y\":%d,\"w\":%d,\"h\":%d},\"sourceSize\":{\"w\":%d,\"h\":%d}}\n",
                     firstImage? " " : ",",
                     saneFilename.c_str(),
                     r.x, r.y, r.image->fillw, r.image->fillh,
@@ -206,8 +235,11 @@ void ImagePack(const Options &options)
     switch (options.format) {
         case Options::FORMAT_TXT:
             break;
-        case Options::FORMAT_JSON:
+        case Options::FORMAT_JSON_HASH:
             fputs("}}\n", mapf);
+            break;
+        case Options::FORMAT_JSON_ARRAY:
+            fputs("]}\n", mapf);
             break;
         case Options::FORMAT_PLIST:
             fputs("</dict></dict></plist>\n", mapf);
@@ -215,6 +247,6 @@ void ImagePack(const Options &options)
     }
     fclose(mapf);
 
-    std::string outImageFilename = basename(options.outfile) + ".png";
+    // Save the image
     dest.Save(outImageFilename.c_str());
 }

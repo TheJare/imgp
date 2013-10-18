@@ -19,9 +19,10 @@ Uses a modified version of the Guillotine bin packing algorithm by Jukka Jylänk
         -maxh, --max-height   number      Maximum output height [4096]
         -padx, --padding-x    number      Horizontal space between images [1]
         -pady, --padding-y    number      Vertical space between images [1]
-        -fmt, --map-format    [json,plist,txt] Format of the map file [plist]
+        -fmt, --map-format    format      Format of the map file [plist]
         -rot, --allow-rotate              Images can be rotated 90 deg
         -sq, --force-square               Output must be square
+      Valid formats: plist, json-array, json-hash, txt
 
 The output filename determines where the resulting image (always .png) and map file will be saved.
 
