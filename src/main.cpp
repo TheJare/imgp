@@ -27,6 +27,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string>
+#include <string.h>
 
 #include "ImagePacker.h"
 
@@ -132,7 +133,7 @@ int main(int argc, char* argv[])
                 help(stdout);
                 exit(0);
             } else if (arg.compare("-v") == 0 || arg.compare("--version") == 0) {
-                printf("imgp v%s", Options::version);
+                printf("imgp v%s\n", Options::version);
                 exit(0);
             } else {
                 error("Invalid argument: %s" , arg.c_str());
