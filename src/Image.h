@@ -41,6 +41,8 @@ struct Image {
     }
     Image(int _w, int _h, int _ncomps);
 
+    bool isLoaded() const { return data.get() != nullptr; }
+
     void Read(const char *_filename);
     void Save(const char *_filename);
 

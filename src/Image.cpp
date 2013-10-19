@@ -21,6 +21,7 @@
  * THE SOFTWARE.
  */
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "Image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -41,7 +42,7 @@ Image::Image(int _w, int _h, int _ncomps): data(nullptr), w(0), h(0), ncomps(0) 
     }
 }
 void Image::Read(const char *_filename) {
-    data = std::shared_ptr<unsigned char>(stbi_load(_filename, &w, &h, &ncomps, 0), free);
+    data = std::shared_ptr<unsigned char>(stbi_load(_filename, &w, &h, &ncomps, 0), stbi_image_free);
     ResetFillArea();
     filename = _filename;
 }
@@ -65,7 +66,7 @@ void Image::Rotate() {
             ps -= (w+1)*ncomps;
         }
     }
-    data = std::shared_ptr<unsigned char>(newdata, free);
+    data = std::shared_ptr<unsigned char>(newdata, stbi_image_free);
     int noy = filly;
     filly = fillx;
     fillx = h - noy - fillh;

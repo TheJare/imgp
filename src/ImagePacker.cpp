@@ -101,9 +101,13 @@ void ImagePack(const Options &options)
     std::vector<Image*> images;
     for (const auto &i: options.infiles) {
         Image *img = new Image(i.c_str());
-        printf("Input file: %s (%d x %d, %d channels)\n", i.c_str(), img->w, img->h, img->ncomps);
+        if (!img->isLoaded()) {
+            printf("...skipping file %s\n", i.c_str());
+            continue;
+        }
+        printf("Input file: %s (%d x %d, %d channels).", i.c_str(), img->w, img->h, img->ncomps);
         img->FindFillArea();
-        printf("  Fill area is %d,%d x %d,%d\n", img->fillx, img->filly, img->fillw, img->fillh);
+        printf(" Fill area is %d,%d x %d,%d\n", img->fillx, img->filly, img->fillw, img->fillh);
         images.push_back(img);
     }
 

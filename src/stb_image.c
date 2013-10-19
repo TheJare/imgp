@@ -426,6 +426,7 @@ static void start_callbacks(stbi *s, stbi_io_callbacks *c, void *user)
    s->buflen = sizeof(s->buffer_start);
    s->read_from_callbacks = 1;
    s->img_buffer_original = s->buffer_start;
+   s->img_buffer_end = s->buffer_start + s->buflen;
    refill_buffer(s);
 }
 
