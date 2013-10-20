@@ -40,17 +40,9 @@ Note: Not heavily tested yet, output formats may be still bogus.
 
 Get the latest source code from [https://github.com/TheJare/imgp.git](https://github.com/TheJare/imgp.git)
 
-### Windows
+On Windows, you can use the provided VS2012 project & solution, or run `mkvc.bat` on the command-line. For OSX and Linux you can run `./mkclang` or `./mkgcc` depending on your compiler.
 
-    mkvc.bat
-
-Or use the provided project & solution
-
-### OSX / Linux (using clang)
-
-    ./mkclang
-
-Note: the source code uses C++11 features and therefore requires a recent Visual Studio (2012+) or clang (3.0+)
+The source code uses C++11 features and therefore requires a recent compiler. Tested with Visual Studio 2012 & 2013, clang 3.3/OSX and gcc 4.7/Ubuntu.
 
 ## License
 
