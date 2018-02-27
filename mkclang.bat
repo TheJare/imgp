@@ -1,0 +1,1 @@
+E:\Soft\LLVM\bin\clang-cl -std:c++14 -fms-compatibility-version=19 src/Image.cpp src/ImagePacker.cpp src/Rect.cpp src/GuillotineBinPack.cpp src/main.cpp -EHsc -MT -O2 %* -link setargv.obj -subsystem:console -out:bin/imgp.clang.exe
